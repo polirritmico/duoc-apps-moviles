@@ -56,8 +56,8 @@ class SonidosQuiz(contexto: Context) {
 
     private fun reproducir(sonido: Int) {
         if (sonidosListos.contains(sonido)) {
-            // Volumen izquierdo, derecho, prioridad, repeticiones y velocidad.
-            soundPool.play(sonido, 0.6f, 0.6f, 1, 0, 1f)
+            // Volumen completo en ambos canales; respeta el volumen del dispositivo.
+            soundPool.play(sonido, 1f, 1f, 1, 0, 1f)
         }
     }
 
