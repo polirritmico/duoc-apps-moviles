@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="300dp"
+    android:height="150dp"
+    android:viewportWidth="300"
+    android:viewportHeight="150">
+    <!-- Bandera de Turquía. -->
+    <path android:fillColor="#E30A17" android:pathData="M5,30h125v85h-125z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M64,48a24,24 0,1 0,0 48a24,24 0,1 0,0 -48" />
+    <path android:fillColor="#E30A17" android:pathData="M71,53a19,19 0,1 0,0 38a19,19 0,1 0,0 -38" />
+    <path android:fillColor="#FFFFFF" android:pathData="M91,61L94,69L103,69L96,74L99,83L91,78L84,83L86,74L79,69L88,69Z" />
+    <!-- Flecha que indica el paso de turco a español. -->
+    <path android:fillColor="#455A64" android:pathData="M138,69h15v-7l12,11 -12,11v-7h-15z" />
+    <!-- Colores de la bandera de España. -->
+    <path android:fillColor="#AA151B" android:pathData="M175,30h120v85h-120z" />
+    <path android:fillColor="#F1BF00" android:pathData="M175,51h120v43h-120z" />
+</vector>
