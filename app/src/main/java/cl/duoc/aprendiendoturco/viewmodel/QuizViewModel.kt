@@ -83,6 +83,44 @@ class QuizViewModel : ViewModel() {
             "«Quisiera» nazikçe bir şey istemek için kullanılır. «Un cafecito, porfa, amor» da uygundur ve eşler arasında daha samimidir. Bir sonraki oyunda deneyebilirsin.", "formal")
     )
 
+    private val alternativasHijos = listOf(
+        Alternativa("Qué lata, hazlo tú.", false,
+            "Bu durumda kaba bir cevap.",
+            "Ana: «Yo también necesito ayuda».\nTürkçesi: «Benim de yardıma ihtiyacım var».",
+            "Şili'de «qué lata», bir şeyin sıkıcı veya can sıkıcı olduğunu anlatır. Burada «hazlo tú» ile birlikte yardım etmek istemediğini sertçe söylüyorsun."),
+        Alternativa("Sí, amor. Los despierto y vuelvo al tiro.", true,
+            "Doğru! Samimi ve yardımsever bir cevap.",
+            "Ana: «Gracias, amor. Los esperamos para desayunar».\nTürkçesi: «Teşekkürler, aşkım. Kahvaltı için onları bekliyoruz».",
+            "«Al tiro», Şili'de «hemen» demektir. Burada kaba değildir: yardım etmeyi kabul ediyorsun. «Por supuesto. Iré a despertarlos antes de salir» da uygundur ve daha resmîdir.", "cercano"),
+        Alternativa("Por supuesto. Iré a despertarlos antes de salir.", true,
+            "Doğru! Nazik ve daha resmî bir cevap.",
+            "Ana: «Muchas gracias. Voy a terminar de preparar sus cosas».\nTürkçesi: «Çok teşekkürler. Eşyalarını hazırlamayı bitireceğim».",
+            "«Por supuesto», «elbette» demektir. «Sí, amor. Los despierto y vuelvo al tiro» da uygundur ve daha samimidir. Bir sonraki oyunda deneyebilirsin.", "formal"),
+        Alternativa("Sí, voy a acostarlos para que empiecen el día.", false,
+            "Eylemleri karıştırdın.",
+            "Ana: «¡Necesitan levantarse, no acostarse!»\nTürkçesi: «Kalkmaları gerekiyor, yatmaları değil!»",
+            "«Acostar», birini yatırmak demektir. Güne başlamak için çocukları uyandırmalısın: «despertar».")
+    )
+
+    private val alternativasDespedida = listOf(
+        Alternativa("Hasta luego, Ana. Que tengan un buen día.", true,
+            "Doğru! Nazik ve daha resmî bir veda.",
+            "Ana: «Que te vaya bien, Juan. Después te cuento cómo nos fue».\nTürkçesi: «İşlerin yolunda gitsin, Juan. Sonra günümüzün nasıl geçtiğini anlatırım».",
+            "«Que tengan un buen día» birden fazla kişiye iyi günler dilemek için kullanılır. «Chao, mi amor. Nos vemos en la noche. ¡Los quiero!» da uygundur ve daha samimidir.", "formal"),
+        Alternativa("Bienvenida, Ana. Nos vemos ayer.", false,
+            "Vedalaşmayı ve zamanı karıştırdın.",
+            "Ana: «¿Ayer? Querrás decir después».\nTürkçesi: «Dün mü? Sonra demek istiyorsun herhalde».",
+            "«Bienvenida», gelen birini karşılamak için kullanılır. «Ayer» geçmişteki «dün» demektir. Vedalaşırken «hasta luego» veya «chao» diyebilirsin."),
+        Alternativa("Ya, me voy. No me den jugo.", false,
+            "Bu durumda kaba bir veda.",
+            "Ana: «Podrías despedirte con más cariño».\nTürkçesi: «Daha sevgi dolu bir şekilde vedalaşabilirsin».",
+            "Şili'de «no me den jugo», bağlama göre «beni rahatsız etmeyin» veya «işimi zorlaştırmayın» anlamına gelebilir. Burada ailene karşı kırıcı duyulur."),
+        Alternativa("Chao, mi amor. Nos vemos en la noche. ¡Los quiero!", true,
+            "Doğru! Sevgi dolu ve samimi bir veda.",
+            "Ana ve çocuklar: «¡Te queremos! ¡Que te vaya bien!»\nTürkçesi: «Seni seviyoruz! İşlerin yolunda gitsin!»",
+            "«Chao» günlük bir vedadır. «Los quiero» ailene sevgini gösterir. «Hasta luego, Ana. Que tengan un buen día» da uygundur ve daha resmîdir. Bir sonraki oyunda deneyebilirsin.", "cercano")
+    )
+
     // Solo cambia el contexto según la elección de la escena anterior.
     val preguntaActual: Pregunta
         get() {
@@ -110,6 +148,28 @@ class QuizViewModel : ViewModel() {
                     "Ana kahvaltıda ne içmek istediğini soruyor.",
                     alternativasCafe
                 )
+                4 -> Pregunta(
+                    "Çocukları uyandırma zamanı",
+                    if (cercano) "Ana kahveni verip yanına oturdu. Çocuklardan biri odasından sesleniyor."
+                    else "Ana «Juan Bey» diye şaka yaparak kahveni verdi. Çocuklardan biri odasından sesleniyor.",
+                    if (cercano) "Ana: «Amor, ¿puedes despertar a los otros dos?»"
+                    else "Ana: «Juan, ¿podrías despertar a los otros dos, por favor?»",
+                    if (cercano) "Aşkım, diğer ikisini uyandırabilir misin?"
+                    else "Juan, diğer ikisini uyandırabilir misin, lütfen?",
+                    "Çocuklardan biri uyandı. Ana diğer iki çocuğu uyandırmanı istiyor.",
+                    alternativasHijos
+                )
+                5 -> Pregunta(
+                    "İşe gitmeden önce",
+                    if (cercano) "Çocukları uyandırdın. Şimdi herkes mutfakta kahvaltı ediyor. İşe gitme zamanın geldi."
+                    else "Çocukları uyandırıp çantalarını hazırladın. Ana sana teşekkür ediyor ve kapıya kadar eşlik ediyor.",
+                    if (cercano) "Ana: «Ya es hora de salir, amor. ¡Que te vaya bien!»"
+                    else "Ana: «Gracias por ayudar, Juan. Que tengas un buen día».",
+                    if (cercano) "Artık çıkma zamanı, aşkım. İşlerin yolunda gitsin!"
+                    else "Yardımın için teşekkürler, Juan. İyi günler.",
+                    "Bugün iki vardiya çalışacaksın. Evden çıkmadan önce ailene veda et.",
+                    alternativasDespedida
+                )
                 else -> Pregunta(
                     "Güne başlarken", "Ana gözlerini açıyor ve sana gülümsüyor.",
                     "Ana: «Buenos días, Juan. Ya es hora de levantarse».",
@@ -134,7 +194,7 @@ class QuizViewModel : ViewModel() {
     fun siguientePregunta() {
         val actual = _estado.value
         val respuesta = actual.respuesta ?: return
-        if (!respuesta.esCorrecta || actual.numeroPregunta >= 3) return
+        if (!respuesta.esCorrecta || actual.numeroPregunta >= 5) return
         _estado.value = QuizUiState(
             numeroPregunta = actual.numeroPregunta + 1,
             caminoAnterior = respuesta.camino

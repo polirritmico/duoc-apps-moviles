@@ -43,18 +43,60 @@ class QuizViewModelTest {
     }
 
     @Test
-    fun prototipoTerminaEnLaTerceraYPermiteReiniciar() {
+    fun historiaTerminaEnLaQuintaYPermiteReiniciar() {
         val viewModel = QuizViewModel()
-        for (indice in listOf(0, 1, 3)) {
+        for (indice in listOf(0, 1, 3, 1, 3)) {
             viewModel.responder(indice)
             viewModel.siguientePregunta()
         }
-        assertEquals(3, viewModel.estado.value.numeroPregunta)
+        assertEquals(5, viewModel.estado.value.numeroPregunta)
         assertNotNull(viewModel.estado.value.respuesta)
         viewModel.reiniciarHistoria()
         assertEquals(1, viewModel.estado.value.numeroPregunta)
         assertNull(viewModel.estado.value.respuesta)
         assertNull(viewModel.estado.value.caminoAnterior)
+    }
+
+    @Test
+    fun ultimasEscenasConservanDosCaminosYCuatroAlternativas() {
+        val cercano = QuizViewModel()
+        val formal = QuizViewModel()
+        for (indice in listOf(0, 2, 0)) {
+            cercano.responder(indice)
+            cercano.siguientePregunta()
+        }
+        for (indice in listOf(3, 1, 3)) {
+            formal.responder(indice)
+            formal.siguientePregunta()
+        }
+        assertEquals(4, cercano.estado.value.numeroPregunta)
+        assertNotEquals(cercano.preguntaActual.contexto, formal.preguntaActual.contexto)
+        for (viewModel in listOf(cercano, formal)) {
+            assertEquals(4, viewModel.preguntaActual.alternativas.size)
+            assertEquals(2, viewModel.preguntaActual.alternativas.count { it.esCorrecta })
+            viewModel.responder(0)
+            viewModel.siguientePregunta()
+            assertEquals(4, viewModel.estado.value.numeroPregunta)
+            viewModel.reintentar()
+        }
+        cercano.responder(1)
+        formal.responder(2)
+        cercano.siguientePregunta()
+        formal.siguientePregunta()
+        assertNotEquals(cercano.preguntaActual.contexto, formal.preguntaActual.contexto)
+        assertNotEquals(cercano.preguntaActual.dialogo, formal.preguntaActual.dialogo)
+        for (viewModel in listOf(cercano, formal)) {
+            assertEquals(2, viewModel.preguntaActual.alternativas.count { it.esCorrecta })
+            viewModel.responder(2)
+            viewModel.siguientePregunta()
+            assertEquals(5, viewModel.estado.value.numeroPregunta)
+            assertFalse(viewModel.estado.value.respuesta!!.esCorrecta)
+            viewModel.reintentar()
+        }
+        cercano.responder(3)
+        formal.responder(0)
+        assertEquals("cercano", cercano.estado.value.respuesta!!.camino)
+        assertEquals("formal", formal.estado.value.respuesta!!.camino)
     }
 
     @Test

@@ -95,12 +95,19 @@ fun PreguntaScreen(
                     }
                 }
                 if (respuesta.esCorrecta) {
-                    if (estado.numeroPregunta < 3) {
+                    if (estado.numeroPregunta < 5) {
                         Button(onClick = onSiguiente, modifier = Modifier.fillMaxWidth()) {
                             Text("Devam et")
                         }
                     } else {
-                        Text("Prototip burada bitiyor. Son iki soru yakında eklenecek.")
+                        Text("Tebrikler! Beş soruluk hikâyeyi tamamladın.", style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            if (respuesta.camino == "cercano")
+                                "Ana ve çocuklar sana sevgiyle veda ediyor. Yorgunsun, ama ailenin desteğiyle işe gidiyorsun."
+                            else
+                                "Ana sana iyi bir iş günü diliyor. Çocukların gününün nasıl geçtiğini akşam anlatacak. Sen de işe doğru yola çıkıyorsun."
+                        )
+                        Text("Farklı tepkileri görmek için yeniden oyna ve diğer uygun cevapları dene.")
                         Button(onClick = onReiniciar, modifier = Modifier.fillMaxWidth()) {
                             Text("Hikâyeyi yeniden başlat")
                         }
