@@ -33,10 +33,10 @@ class SonidosQuiz(contexto: Context) {
                 sonidosListos.add(id)
             }
         }
-        sonidoCercano = soundPool.load(contexto, R.raw.aplauso, 1)
-        sonidoFormal = soundPool.load(contexto, R.raw.neutral, 1)
-        sonidoRudo = soundPool.load(contexto, R.raw.sorpresa, 1)
-        sonidoConfusion = soundPool.load(contexto, R.raw.risa, 1)
+        sonidoCercano = soundPool.load(contexto, R.raw.respuesta_cercana, 1)
+        sonidoFormal = soundPool.load(contexto, R.raw.respuesta_formal, 1)
+        sonidoRudo = soundPool.load(contexto, R.raw.respuesta_ruda, 1)
+        sonidoConfusion = soundPool.load(contexto, R.raw.respuesta_confusion, 1)
         sonidoFinal = soundPool.load(contexto, R.raw.final_historia, 1)
     }
 
