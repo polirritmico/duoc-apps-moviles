@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import cl.duoc.aprendiendoturco.ui.theme.AprendiendoTurcoTheme
 
 @Composable
-fun ContextoScreen() {
+fun ContextoScreen(onIniciar: () -> Unit = {}) {
     Scaffold { innerPadding ->
         // El desplazamiento permite leer la historia en pantallas pequeñas.
         Column(
@@ -53,18 +53,13 @@ fun ContextoScreen() {
                 style = MaterialTheme.typography.titleMedium
             )
 
-            // Activaremos este botón al agregar la primera pregunta.
+            // Abre la primera pregunta de la historia.
             Button(
-                onClick = {},
-                enabled = false,
+                onClick = onIniciar,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Hikâyeye başla")
             }
-            Text(
-                text = "Sorular yakında eklenecek.",
-                style = MaterialTheme.typography.bodySmall
-            )
         }
     }
 }

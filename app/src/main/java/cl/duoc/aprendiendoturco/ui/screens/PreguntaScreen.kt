@@ -14,10 +14,11 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cl.duoc.aprendiendoturco.model.Alternativa
+import cl.duoc.aprendiendoturco.model.Pregunta
 import cl.duoc.aprendiendoturco.model.QuizUiState
 import cl.duoc.aprendiendoturco.ui.theme.AprendiendoTurcoTheme
 import cl.duoc.aprendiendoturco.viewmodel.QuizViewModel
@@ -25,10 +26,14 @@ import cl.duoc.aprendiendoturco.viewmodel.QuizViewModel
 @Composable
 fun PreguntaScreen(
     estado: QuizUiState,
-    alternativas: List<Alternativa>,
+    pregunta: Pregunta,
     onResponder: (Int) -> Unit,
-    onReintentar: () -> Unit
+    onReintentar: () -> Unit,
+    onSiguiente: () -> Unit,
+    onReiniciar: () -> Unit
 ) {
+    // Cada nueva pregunta comienza con el desplazamiento arriba.
+    key(estado.numeroPregunta) {
     Scaffold { innerPadding ->
         Column(
             modifier = Modifier
@@ -38,30 +43,30 @@ fun PreguntaScreen(
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text("Soru 1 / 5", style = MaterialTheme.typography.labelLarge)
+            Text("Soru ${estado.numeroPregunta} / 5", style = MaterialTheme.typography.labelLarge)
             Text(
-                "Güne başlarken",
+                pregunta.titulo,
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.primary
             )
-            Text("Ana gözlerini açıyor ve sana gülümsüyor.")
+            Text(pregunta.contexto)
             Text(
-                "Ana: «Buenos días, Juan. Ya es hora de levantarse».",
+                pregunta.dialogo,
                 style = MaterialTheme.typography.titleMedium
             )
             // Traducción directa del diálogo para comprender la frase completa.
             Text(
-                "Türkçesi: «Günaydın, Juan. Artık kalkma zamanı».",
+                "Türkçesi: «${pregunta.traduccion}».",
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
-                "Ana sana günaydın diyor ve kalkma zamanının geldiğini söylüyor.",
+                pregunta.ayuda,
                 style = MaterialTheme.typography.bodyMedium
             )
             Text("Ana'ya nasıl cevap verirsin?", style = MaterialTheme.typography.titleMedium)
 
             // No mostramos cuáles son correctas antes de responder.
-            alternativas.forEachIndexed { indice, alternativa ->
+            pregunta.alternativas.forEachIndexed { indice, alternativa ->
                 OutlinedButton(
                     onClick = { onResponder(indice) },
                     enabled = estado.respuesta == null,
@@ -90,7 +95,16 @@ fun PreguntaScreen(
                     }
                 }
                 if (respuesta.esCorrecta) {
-                    Text("Prototip burada bitiyor. İkinci soru yakında eklenecek.")
+                    if (estado.numeroPregunta < 3) {
+                        Button(onClick = onSiguiente, modifier = Modifier.fillMaxWidth()) {
+                            Text("Devam et")
+                        }
+                    } else {
+                        Text("Prototip burada bitiyor. Son iki soru yakında eklenecek.")
+                        Button(onClick = onReiniciar, modifier = Modifier.fillMaxWidth()) {
+                            Text("Hikâyeyi yeniden başlat")
+                        }
+                    }
                 }
                 Button(onClick = onReintentar, modifier = Modifier.fillMaxWidth()) {
                     Text(if (respuesta.esCorrecta) "Diğer cevabı dene" else "Tekrar dene")
@@ -98,12 +112,13 @@ fun PreguntaScreen(
             }
         }
     }
+    }
 }
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 800)
 @Composable
 fun PreguntaScreenPreview() {
     AprendiendoTurcoTheme {
-        PreguntaScreen(QuizUiState(), QuizViewModel().alternativas, {}, {})
+        PreguntaScreen(QuizUiState(), QuizViewModel().preguntaActual, {}, {}, {}, {})
     }
 }
