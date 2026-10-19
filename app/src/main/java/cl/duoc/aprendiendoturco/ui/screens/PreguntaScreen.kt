@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,6 +27,7 @@ import cl.duoc.aprendiendoturco.model.QuizUiState
 import cl.duoc.aprendiendoturco.ui.theme.AprendiendoTurcoTheme
 import cl.duoc.aprendiendoturco.viewmodel.QuizViewModel
 import cl.duoc.aprendiendoturco.ui.utils.SonidosQuiz
+import kotlinx.coroutines.delay
 
 @Composable
 fun PreguntaScreen(
@@ -41,6 +43,13 @@ fun PreguntaScreen(
     // Cargamos una vez y liberamos el audio al salir de la pantalla.
     DisposableEffect(sonidos) {
         onDispose { sonidos.liberar() }
+    }
+    // El cierre suena después de la reacción, sin taparla ni repetirla al redibujar.
+    LaunchedEffect(estado.numeroPregunta, estado.respuesta) {
+        if (estado.numeroPregunta == 5 && estado.respuesta?.esCorrecta == true) {
+            delay(1000)
+            sonidos.reproducirFinal()
+        }
     }
     // Cada nueva pregunta comienza con el desplazamiento arriba.
     key(estado.numeroPregunta) {
@@ -79,11 +88,7 @@ fun PreguntaScreen(
             pregunta.alternativas.forEachIndexed { indice, alternativa ->
                 OutlinedButton(
                     onClick = {
-                        if (estado.numeroPregunta == 5 && alternativa.esCorrecta) {
-                            sonidos.reproducirFinal()
-                        } else {
-                            sonidos.reproducirSeleccion()
-                        }
+                        sonidos.reproducirRespuesta(alternativa)
                         onResponder(indice)
                     },
                     enabled = estado.respuesta == null,

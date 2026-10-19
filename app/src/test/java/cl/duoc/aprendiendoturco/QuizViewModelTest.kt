@@ -6,6 +6,20 @@ import org.junit.Test
 
 class QuizViewModelTest {
     @Test
+    fun cadaPreguntaTieneLosCuatroTiposDeReaccion() {
+        val viewModel = QuizViewModel()
+        repeat(5) {
+            val alternativas = viewModel.preguntaActual.alternativas
+            assertEquals(1, alternativas.count { it.esCorrecta && it.camino == "cercano" })
+            assertEquals(1, alternativas.count { it.esCorrecta && it.camino == "formal" })
+            assertEquals(1, alternativas.count { !it.esCorrecta && it.esRuda })
+            assertEquals(1, alternativas.count { !it.esCorrecta && !it.esRuda })
+            viewModel.responder(alternativas.indexOfFirst { it.esCorrecta })
+            viewModel.siguientePregunta()
+        }
+    }
+
+    @Test
     fun cadaEleccionCambiaElContextoSiguiente() {
         val cercano = QuizViewModel()
         val formal = QuizViewModel()

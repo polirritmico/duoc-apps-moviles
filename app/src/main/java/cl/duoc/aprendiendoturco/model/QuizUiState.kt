@@ -7,7 +7,8 @@ data class Alternativa(
     val titulo: String,
     val reaccion: String,
     val explicacion: String,
-    val camino: String? = null
+    val camino: String? = null,
+    val esRuda: Boolean = false
 )
 
 data class QuizUiState(
