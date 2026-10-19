@@ -13,6 +13,7 @@ import cl.duoc.aprendiendoturco.ui.screens.ContextoScreen
 import cl.duoc.aprendiendoturco.viewmodel.LoginViewModel
 import cl.duoc.aprendiendoturco.ui.screens.PreguntaScreen
 import cl.duoc.aprendiendoturco.viewmodel.QuizViewModel
+import cl.duoc.aprendiendoturco.ui.screens.FinalScreen
 
 // Rutas de las pantallas, siguiendo la estructura de la guía 10.
 sealed class Screen(val route: String) {
@@ -20,6 +21,7 @@ sealed class Screen(val route: String) {
     data object Home : Screen("home")
     data object Contexto : Screen("contexto")
     data object Pregunta : Screen("pregunta")
+    data object Final : Screen("final")
 }
 
 @Composable
@@ -68,8 +70,19 @@ fun AppNavigation() {
                 onResponder = quizViewModel::responder,
                 onReintentar = quizViewModel::reintentar,
                 onSiguiente = quizViewModel::siguientePregunta,
-                onReiniciar = quizViewModel::reiniciarHistoria
+                onFinalizar = {
+                    navController.navigate(Screen.Final.route) {
+                        // Quitamos la partida terminada para comenzar de cero después.
+                        popUpTo(Screen.Home.route)
+                        launchSingleTop = true
+                    }
+                }
             )
+        }
+        composable(Screen.Final.route) {
+            FinalScreen(onInicio = {
+                navController.popBackStack(Screen.Home.route, inclusive = false)
+            })
         }
     }
 }

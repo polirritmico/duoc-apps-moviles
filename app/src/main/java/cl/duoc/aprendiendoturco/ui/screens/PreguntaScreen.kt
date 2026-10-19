@@ -36,7 +36,7 @@ fun PreguntaScreen(
     onResponder: (Int) -> Unit,
     onReintentar: () -> Unit,
     onSiguiente: () -> Unit,
-    onReiniciar: () -> Unit
+    onFinalizar: () -> Unit
 ) {
     val contexto = LocalContext.current
     val sonidos = remember(contexto) { SonidosQuiz(contexto) }
@@ -130,8 +130,8 @@ fun PreguntaScreen(
                                 "Ana sana iyi bir iş günü diliyor. Çocukların gününün nasıl geçtiğini akşam anlatacak. Sen de işe doğru yola çıkıyorsun."
                         )
                         Text("Farklı tepkileri görmek için yeniden oyna ve diğer uygun cevapları dene.")
-                        Button(onClick = onReiniciar, modifier = Modifier.fillMaxWidth()) {
-                            Text("Hikâyeyi yeniden başlat")
+                        Button(onClick = onFinalizar, modifier = Modifier.fillMaxWidth()) {
+                            Text("Bitir")
                         }
                     }
                 }
