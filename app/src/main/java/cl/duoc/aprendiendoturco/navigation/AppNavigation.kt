@@ -1,5 +1,7 @@
 package cl.duoc.aprendiendoturco.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,7 +32,15 @@ fun AppNavigation() {
     val loginViewModel: LoginViewModel = viewModel()
     val estado by loginViewModel.estado.collectAsState()
 
-    NavHost(navController = navController, startDestination = Screen.Login.route) {
+    // Cambios directos de pantalla, sin el fundido que agrega NavHost por defecto.
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Login.route,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None },
+        popEnterTransition = { EnterTransition.None },
+        popExitTransition = { ExitTransition.None }
+    ) {
         composable(Screen.Login.route) {
             LoginScreen(
                 estado = estado,
