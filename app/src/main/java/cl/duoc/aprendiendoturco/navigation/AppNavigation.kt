@@ -9,12 +9,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cl.duoc.aprendiendoturco.ui.screens.HomeScreenCompact
 import cl.duoc.aprendiendoturco.ui.screens.LoginScreen
+import cl.duoc.aprendiendoturco.ui.screens.ContextoScreen
 import cl.duoc.aprendiendoturco.viewmodel.LoginViewModel
 
 // Rutas de las pantallas, siguiendo la estructura de la guía 10.
 sealed class Screen(val route: String) {
     data object Login : Screen("login")
     data object Home : Screen("home")
+    data object Contexto : Screen("contexto")
 }
 
 @Composable
@@ -41,7 +43,14 @@ fun AppNavigation() {
         }
         composable(Screen.Home.route) {
             // Por ahora usamos la bienvenida compacta en todos los tamaños.
-            HomeScreenCompact()
+            HomeScreenCompact(onComenzar = {
+                navController.navigate(Screen.Contexto.route) {
+                    launchSingleTop = true
+                }
+            })
+        }
+        composable(Screen.Contexto.route) {
+            ContextoScreen()
         }
     }
 }

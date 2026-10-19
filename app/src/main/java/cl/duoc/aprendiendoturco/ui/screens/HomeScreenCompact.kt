@@ -23,7 +23,7 @@ import cl.duoc.aprendiendoturco.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenCompact() {
+fun HomeScreenCompact(onComenzar: () -> Unit = {}) {
     Scaffold(
         // Barra superior de la pantalla principal.
         topBar = {
@@ -55,9 +55,9 @@ fun HomeScreenCompact() {
                 contentScale = ContentScale.Fit
             )
 
-            // Agregaremos la navegación cuando trabajemos la guía 10.
+            // Abre la pantalla que presenta la historia.
             Button(
-                onClick = { /* Navegación pendiente */ },
+                onClick = onComenzar,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Başla / Comenzar")
