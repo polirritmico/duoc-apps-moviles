@@ -37,7 +37,7 @@ class SonidosQuiz(contexto: Context) {
         sonidoFormal = soundPool.load(contexto, R.raw.respuesta_formal, 1)
         sonidoRudo = soundPool.load(contexto, R.raw.respuesta_ruda, 1)
         sonidoConfusion = soundPool.load(contexto, R.raw.respuesta_confusion, 1)
-        sonidoFinal = soundPool.load(contexto, R.raw.final_historia, 1)
+        sonidoFinal = soundPool.load(contexto, R.raw.final_marimba, 1)
     }
 
     fun reproducirRespuesta(alternativa: Alternativa) {

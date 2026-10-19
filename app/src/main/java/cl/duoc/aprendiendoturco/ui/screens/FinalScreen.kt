@@ -35,6 +35,10 @@ fun FinalScreen(onInicio: () -> Unit) {
                 style = MaterialTheme.typography.bodyLarge
             )
             Text("Farklı cevapları keşfetmek için baştan oynayabilirsin. Görüşürüz!")
+            Text(
+                "Bu oyun bir deneme sürümüdür.",
+                style = MaterialTheme.typography.bodyMedium
+            )
             // Regresa a la bienvenida sin volver a pedir el inicio de sesión.
             Button(onClick = onInicio, modifier = Modifier.fillMaxWidth()) {
                 Text("Ana sayfaya dön")
