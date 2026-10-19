@@ -14,14 +14,18 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cl.duoc.aprendiendoturco.model.Pregunta
 import cl.duoc.aprendiendoturco.model.QuizUiState
 import cl.duoc.aprendiendoturco.ui.theme.AprendiendoTurcoTheme
 import cl.duoc.aprendiendoturco.viewmodel.QuizViewModel
+import cl.duoc.aprendiendoturco.ui.utils.SonidosQuiz
 
 @Composable
 fun PreguntaScreen(
@@ -32,6 +36,12 @@ fun PreguntaScreen(
     onSiguiente: () -> Unit,
     onReiniciar: () -> Unit
 ) {
+    val contexto = LocalContext.current
+    val sonidos = remember(contexto) { SonidosQuiz(contexto) }
+    // Cargamos una vez y liberamos el audio al salir de la pantalla.
+    DisposableEffect(sonidos) {
+        onDispose { sonidos.liberar() }
+    }
     // Cada nueva pregunta comienza con el desplazamiento arriba.
     key(estado.numeroPregunta) {
     Scaffold { innerPadding ->
@@ -68,7 +78,14 @@ fun PreguntaScreen(
             // No mostramos cuáles son correctas antes de responder.
             pregunta.alternativas.forEachIndexed { indice, alternativa ->
                 OutlinedButton(
-                    onClick = { onResponder(indice) },
+                    onClick = {
+                        if (estado.numeroPregunta == 5 && alternativa.esCorrecta) {
+                            sonidos.reproducirFinal()
+                        } else {
+                            sonidos.reproducirSeleccion()
+                        }
+                        onResponder(indice)
+                    },
                     enabled = estado.respuesta == null,
                     modifier = Modifier.fillMaxWidth()
                 ) {
