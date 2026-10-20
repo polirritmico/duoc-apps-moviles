@@ -2,7 +2,9 @@ package cl.duoc.aprendiendoturco.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,20 +19,15 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cl.duoc.aprendiendoturco.model.Pregunta
 import cl.duoc.aprendiendoturco.model.QuizUiState
 import cl.duoc.aprendiendoturco.ui.theme.AprendiendoTurcoTheme
 import cl.duoc.aprendiendoturco.viewmodel.QuizViewModel
-import cl.duoc.aprendiendoturco.ui.utils.SonidosQuiz
-import kotlinx.coroutines.delay
 
 @Composable
 fun PreguntaScreen(
@@ -41,19 +38,6 @@ fun PreguntaScreen(
     onSiguiente: () -> Unit,
     onFinalizar: () -> Unit
 ) {
-    val contexto = LocalContext.current
-    val sonidos = remember(contexto) { SonidosQuiz(contexto) }
-    // Cargamos una vez y liberamos el audio al salir de la pantalla.
-    DisposableEffect(sonidos) {
-        onDispose { sonidos.liberar() }
-    }
-    // El cierre suena después de la reacción, sin taparla ni repetirla al redibujar.
-    LaunchedEffect(estado.numeroPregunta, estado.respuesta) {
-        if (estado.numeroPregunta == 5 && estado.respuesta?.esCorrecta == true) {
-            delay(1000)
-            sonidos.reproducirFinal()
-        }
-    }
     // Cada nueva pregunta comienza con el desplazamiento arriba.
     key(estado.numeroPregunta) {
     Scaffold { innerPadding ->
@@ -91,7 +75,6 @@ fun PreguntaScreen(
             pregunta.alternativas.forEachIndexed { indice, alternativa ->
                 OutlinedButton(
                     onClick = {
-                        sonidos.reproducirRespuesta(alternativa)
                         onResponder(indice)
                     },
                     enabled = estado.respuesta == null,
@@ -101,10 +84,11 @@ fun PreguntaScreen(
                 }
             }
 
-            // Si hay una respuesta, mostramos la explicación con un fundido suave.
+            // La explicación se despliega desde arriba y aparece en medio segundo.
             AnimatedVisibility(
                 visible = estado.respuesta != null,
-                enter = fadeIn(),
+                enter = fadeIn(animationSpec = tween(500)) +
+                    expandVertically(animationSpec = tween(500), expandFrom = Alignment.Top),
                 exit = ExitTransition.None
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {

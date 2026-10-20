@@ -12,13 +12,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cl.duoc.aprendiendoturco.ui.theme.AprendiendoTurcoTheme
 
 @Composable
-fun FinalScreen(onInicio: () -> Unit) {
+fun FinalScreen(onInicio: () -> Unit, onSonidoFinal: () -> Unit = {}) {
+    // La marimba suena una vez al entrar al cierre de la historia.
+    LaunchedEffect(Unit) {
+        onSonidoFinal()
+    }
     Scaffold { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding).fillMaxSize()

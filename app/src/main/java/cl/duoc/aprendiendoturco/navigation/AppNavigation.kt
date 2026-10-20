@@ -3,6 +3,9 @@ package cl.duoc.aprendiendoturco.navigation
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -16,6 +19,7 @@ import cl.duoc.aprendiendoturco.viewmodel.LoginViewModel
 import cl.duoc.aprendiendoturco.ui.screens.PreguntaScreen
 import cl.duoc.aprendiendoturco.viewmodel.QuizViewModel
 import cl.duoc.aprendiendoturco.ui.screens.FinalScreen
+import cl.duoc.aprendiendoturco.ui.utils.SonidosQuiz
 
 // Rutas de las pantallas, siguiendo la estructura de la guía 10.
 sealed class Screen(val route: String) {
@@ -28,6 +32,12 @@ sealed class Screen(val route: String) {
 
 @Composable
 fun AppNavigation() {
+    // Compartimos los sonidos entre las pantallas para que no se corten al navegar.
+    val contexto = LocalContext.current
+    val sonidos = remember(contexto) { SonidosQuiz(contexto) }
+    DisposableEffect(sonidos) {
+        onDispose { sonidos.liberar() }
+    }
     val navController = rememberNavController()
     val loginViewModel: LoginViewModel = viewModel()
     val estado by loginViewModel.estado.collectAsState()
@@ -77,7 +87,12 @@ fun AppNavigation() {
             PreguntaScreen(
                 estado = quizEstado,
                 pregunta = quizViewModel.preguntaActual,
-                onResponder = quizViewModel::responder,
+                onResponder = { indice ->
+                    if (quizEstado.respuesta == null) {
+                        sonidos.reproducirRespuesta(quizViewModel.preguntaActual.alternativas[indice])
+                        quizViewModel.responder(indice)
+                    }
+                },
                 onReintentar = quizViewModel::reintentar,
                 onSiguiente = quizViewModel::siguientePregunta,
                 onFinalizar = {
@@ -90,7 +105,7 @@ fun AppNavigation() {
             )
         }
         composable(Screen.Final.route) {
-            FinalScreen(onInicio = {
+            FinalScreen(onSonidoFinal = sonidos::reproducirFinal, onInicio = {
                 navController.popBackStack(Screen.Home.route, inclusive = false)
             })
         }
