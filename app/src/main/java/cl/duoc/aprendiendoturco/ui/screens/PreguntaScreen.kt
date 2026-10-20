@@ -1,5 +1,8 @@
 package cl.duoc.aprendiendoturco.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -98,8 +101,14 @@ fun PreguntaScreen(
                 }
             }
 
-            // La explicación aparece debajo de las alternativas para cualquier respuesta.
-            estado.respuesta?.let { respuesta ->
+            // Si hay una respuesta, mostramos la explicación con un fundido suave.
+            AnimatedVisibility(
+                visible = estado.respuesta != null,
+                enter = fadeIn(),
+                exit = ExitTransition.None
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                estado.respuesta?.let { respuesta ->
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(
                         modifier = Modifier.padding(16.dp),
@@ -137,6 +146,8 @@ fun PreguntaScreen(
                 }
                 Button(onClick = onReintentar, modifier = Modifier.fillMaxWidth()) {
                     Text(if (respuesta.esCorrecta) "Diğer cevabı dene" else "Tekrar dene")
+                }
+                }
                 }
             }
         }
