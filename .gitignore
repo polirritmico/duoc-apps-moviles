@@ -1,15 +1,36 @@
-*.iml
-.gradle
+# Android / Gradle build folders
+.gradle/
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+
+# Local SDK path and Secret Keys (Never share these)
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+key.properties
+*.jks
+*.keystore
+
+# Logs
+*.log
+
+# OS specific
 .DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
+
+# Android Studio
+*.iml
+/.idea/assetWizardSettings.xml
+/.idea/caches/
+/.idea/deploymentTargetSelector.xml
+/.idea/deviceManager.xml
+/.idea/libraries/
+/.idea/localTasks.xml
+/.idea/modules.xml
+/.idea/modules/
+/.idea/navEditor.xml
+/.idea/shelf/
+/.idea/tasks.xml
+/.idea/workspace.xml
