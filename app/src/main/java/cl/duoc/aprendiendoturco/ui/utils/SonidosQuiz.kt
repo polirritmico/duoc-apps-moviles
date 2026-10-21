@@ -4,7 +4,7 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.SoundPool
 import cl.duoc.aprendiendoturco.R
-import cl.duoc.aprendiendoturco.model.Alternativa
+import cl.duoc.aprendiendoturco.model.QuizChoice
 import java.util.concurrent.ConcurrentHashMap
 
 // Cuatro reacciones y un sonido adicional al completar la historia.
@@ -40,7 +40,7 @@ class SonidosQuiz(contexto: Context) {
         sonidoFinal = soundPool.load(contexto, R.raw.final_marimba, 1)
     }
 
-    fun reproducirRespuesta(alternativa: Alternativa) {
+    fun reproducirRespuesta(alternativa: QuizChoice) {
         val sonido = when {
             alternativa.esCorrecta && alternativa.camino == "cercano" -> sonidoCercano
             alternativa.esCorrecta -> sonidoFormal

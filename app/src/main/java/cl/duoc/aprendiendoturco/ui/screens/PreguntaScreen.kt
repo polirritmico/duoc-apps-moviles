@@ -24,7 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cl.duoc.aprendiendoturco.model.Pregunta
+
+import cl.duoc.aprendiendoturco.model.QuizQuestion
 import cl.duoc.aprendiendoturco.model.QuizUiState
 import cl.duoc.aprendiendoturco.ui.theme.AprendiendoTurcoTheme
 import cl.duoc.aprendiendoturco.viewmodel.QuizViewModel
@@ -32,7 +33,7 @@ import cl.duoc.aprendiendoturco.viewmodel.QuizViewModel
 @Composable
 fun PreguntaScreen(
     estado: QuizUiState,
-    pregunta: Pregunta,
+    pregunta: QuizQuestion,
     onResponder: (Int) -> Unit,
     onReintentar: () -> Unit,
     onSiguiente: () -> Unit,
