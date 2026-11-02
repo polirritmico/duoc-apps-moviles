@@ -1,6 +1,7 @@
 package cl.duoc.aprendiendoturco.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -22,6 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cl.duoc.aprendiendoturco.model.LoginUiState
 import cl.duoc.aprendiendoturco.ui.theme.AprendiendoTurcoTheme
+import cl.duoc.aprendiendoturco.ui.components.AppBackground
+import cl.duoc.aprendiendoturco.ui.components.LanguageBadge
 
 @Composable
 fun LoginScreen(
@@ -30,7 +34,11 @@ fun LoginScreen(
     onClaveChange: (String) -> Unit,
     onIngresar: () -> Unit
 ) {
-    Scaffold { innerPadding ->
+    AppBackground {
+    Scaffold(
+        containerColor = Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.onBackground
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -40,9 +48,17 @@ fun LoginScreen(
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text("Türkçeden İspanyolcaya", style = MaterialTheme.typography.headlineSmall)
+            LanguageBadge()
+            Text("Türkçeden İspanyolcaya", style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.primary)
             Text("Giriş yap / Iniciar sesión", style = MaterialTheme.typography.titleLarge)
 
+            Column(
+                modifier = Modifier.fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.large)
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
             // Los campos envían sus cambios al ViewModel.
             OutlinedTextField(
                 value = estado.correo,
@@ -69,7 +85,9 @@ fun LoginScreen(
             Button(onClick = onIngresar, modifier = Modifier.fillMaxWidth()) {
                 Text("Giriş yap / Ingresar")
             }
+            }
         }
+    }
     }
 }
 

@@ -11,6 +11,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cl.duoc.aprendiendoturco.ui.theme.AprendiendoTurcoTheme
 import cl.duoc.aprendiendoturco.model.DogRewardUiState
+import cl.duoc.aprendiendoturco.ui.components.AppBackground
 
 @Composable
 fun FinalScreen(
@@ -30,7 +32,11 @@ fun FinalScreen(
     LaunchedEffect(Unit) {
         onSonidoFinal()
     }
-    Scaffold { innerPadding ->
+    AppBackground {
+    Scaffold(
+        containerColor = Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.onBackground
+    ) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding).fillMaxSize()
                 .verticalScroll(rememberScrollState()).padding(24.dp),
@@ -56,6 +62,7 @@ fun FinalScreen(
                 Text("Ana sayfaya dön")
             }
         }
+    }
     }
 }
 

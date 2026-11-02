@@ -15,9 +15,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
@@ -28,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import cl.duoc.aprendiendoturco.model.QuizQuestion
 import cl.duoc.aprendiendoturco.model.QuizUiState
 import cl.duoc.aprendiendoturco.ui.theme.AprendiendoTurcoTheme
+import cl.duoc.aprendiendoturco.ui.components.AppBackground
 import cl.duoc.aprendiendoturco.viewmodel.QuizViewModel
 
 @Composable
@@ -41,7 +44,11 @@ fun PreguntaScreen(
 ) {
     // Cada nueva pregunta comienza con el desplazamiento arriba.
     key(estado.numeroPregunta) {
-    Scaffold { innerPadding ->
+    AppBackground {
+    Scaffold(
+        containerColor = Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.onBackground
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -51,6 +58,11 @@ fun PreguntaScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text("Soru ${estado.numeroPregunta} / 5", style = MaterialTheme.typography.labelLarge)
+            LinearProgressIndicator(
+                progress = { (estado.numeroPregunta - 1) / 5f },
+                modifier = Modifier.fillMaxWidth(),
+                trackColor = MaterialTheme.colorScheme.surfaceVariant
+            )
             Text(
                 pregunta.titulo,
                 style = MaterialTheme.typography.headlineSmall,
@@ -136,6 +148,7 @@ fun PreguntaScreen(
                 }
             }
         }
+    }
     }
     }
 }
