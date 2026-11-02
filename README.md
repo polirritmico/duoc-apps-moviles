@@ -38,6 +38,7 @@ Las dos respuestas válidas permiten avanzar. La elección cambia el contexto de
 - Traducciones al turco y explicaciones para las veinte alternativas.
 - Animación de aparición y despliegue de la explicación con AnimatedVisibility.
 - Cuatro sonidos según el tipo de respuesta y una marimba al entrar a la pantalla final.
+- Una fotografía de un perrito como recompensa al completar la historia, obtenida desde Dog CEO, con el vocabulario «Perro — Köpek».
 - Botón para volver al inicio y comenzar otra partida.
 
 Está hecha en Kotlin con Jetpack Compose y Material 3. Usa modelos y ViewModels para separar los datos, la lógica y las pantallas. El estado se maneja con StateFlow, la navegación con Navigation Compose y los sonidos con SoundPool.
@@ -100,6 +101,12 @@ Es una versión de prueba. Las preguntas y cuentas están escritas en el código
 
 La navegación utiliza actualmente la pantalla de bienvenida compacta para todos los tamaños. Los diseños específicos para tamaños medianos y grandes quedan pendientes.
 
+### Recompensa con API REST
+
+La pantalla final consulta `GET https://dog.ceo/api/breeds/image/random` mediante Retrofit y Gson. `DogRepository` valida la respuesta y `DogRewardViewModel` mantiene los estados de carga, éxito y error. Coil descarga y muestra la fotografía. La consulta se inicia al entrar al final y no se repite por una recomposición o un giro de pantalla.
+
+No requiere cuenta ni clave. Se necesita internet para la fotografía; si falla la consulta o la imagen, se ofrece reintentar y se puede volver al inicio de todas formas. Las pruebas de `DogRepositoryTest` usan un servidor local simulado, sin depender de la disponibilidad de Dog CEO.
+
 ## English
 
 ### About the project
@@ -138,6 +145,7 @@ Both valid responses allow the player to continue. The chosen response changes t
 - Turkish translations and explanations for all twenty answer choices.
 - A fade and vertical expansion animation for explanations using AnimatedVisibility.
 - Four response-specific sounds and a marimba when entering the completion screen.
+- A dog photo reward from Dog CEO after completing the story, paired with “Perro — Köpek” vocabulary.
 - A button to return home and start a new game.
 
 The app is written in Kotlin with Jetpack Compose and Material 3. Models and ViewModels separate data, logic and screens. It uses StateFlow for state, Navigation Compose for navigation and SoundPool for sounds.

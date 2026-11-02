@@ -18,6 +18,7 @@ import cl.duoc.aprendiendoturco.ui.screens.ContextoScreen
 import cl.duoc.aprendiendoturco.viewmodel.LoginViewModel
 import cl.duoc.aprendiendoturco.ui.screens.PreguntaScreen
 import cl.duoc.aprendiendoturco.viewmodel.QuizViewModel
+import cl.duoc.aprendiendoturco.viewmodel.DogRewardViewModel
 import cl.duoc.aprendiendoturco.ui.screens.FinalScreen
 import cl.duoc.aprendiendoturco.ui.utils.SonidosQuiz
 
@@ -105,9 +106,16 @@ fun AppNavigation() {
             )
         }
         composable(Screen.Final.route) {
-            FinalScreen(onSonidoFinal = sonidos::reproducirFinal, onInicio = {
-                navController.popBackStack(Screen.Home.route, inclusive = false)
-            })
+            val rewardViewModel: DogRewardViewModel = viewModel()
+            val recompensa by rewardViewModel.estado.collectAsState()
+            FinalScreen(
+                recompensa = recompensa,
+                onReintentarRecompensa = rewardViewModel::cargarRecompensa,
+                onSonidoFinal = sonidos::reproducirFinal,
+                onInicio = {
+                    navController.popBackStack(Screen.Home.route, inclusive = false)
+                }
+            )
         }
     }
 }

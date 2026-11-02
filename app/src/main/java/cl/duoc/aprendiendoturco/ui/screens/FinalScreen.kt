@@ -17,9 +17,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cl.duoc.aprendiendoturco.ui.theme.AprendiendoTurcoTheme
+import cl.duoc.aprendiendoturco.model.DogRewardUiState
 
 @Composable
-fun FinalScreen(onInicio: () -> Unit, onSonidoFinal: () -> Unit = {}) {
+fun FinalScreen(
+    onInicio: () -> Unit,
+    onSonidoFinal: () -> Unit = {},
+    recompensa: DogRewardUiState = DogRewardUiState.Loading,
+    onReintentarRecompensa: () -> Unit = {}
+) {
     // La marimba suena una vez al entrar al cierre de la historia.
     LaunchedEffect(Unit) {
         onSonidoFinal()
@@ -39,6 +45,7 @@ fun FinalScreen(onInicio: () -> Unit, onSonidoFinal: () -> Unit = {}) {
                 "Beş soruyu tamamladın. İspanyolca selamlaşmayı, kahvaltı hakkında konuşmayı ve vedalaşmayı çalıştın.",
                 style = MaterialTheme.typography.bodyLarge
             )
+            DogRewardCard(recompensa, onReintentarRecompensa)
             Text("Farklı cevapları keşfetmek için baştan oynayabilirsin. Görüşürüz!")
             Text(
                 "Bu oyun bir deneme sürümüdür.",

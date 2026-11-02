@@ -8,6 +8,10 @@ captures/
 *.aab
 *.ap_
 
+# Archivos locales de trabajo y material temporal
+/tmp/
+/git
+
 # Local SDK path and Secret Keys (Never share these)
 /local.properties
 key.properties
@@ -22,6 +26,7 @@ key.properties
 
 # Android Studio
 *.iml
+/.idea/gradle.xml
 /.idea/assetWizardSettings.xml
 /.idea/caches/
 /.idea/deploymentTargetSelector.xml
