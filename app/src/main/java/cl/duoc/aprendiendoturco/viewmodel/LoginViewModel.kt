@@ -13,7 +13,7 @@ class LoginViewModel : ViewModel() {
     // Cuentas de prueba para el ejercicio. No se conecta a un servidor.
     private val usuarios = mapOf(
         "ro.callealta@duocuc.cl" to "hola1234",
-        "ed.bray@duocuc.cl" to "hola1234"
+        "test" to "1234"
     )
 
     fun onCorreoChange(valor: String) {
