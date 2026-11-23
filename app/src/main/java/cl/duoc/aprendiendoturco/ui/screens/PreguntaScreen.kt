@@ -1,10 +1,14 @@
 package cl.duoc.aprendiendoturco.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedButton
@@ -21,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
@@ -58,8 +64,15 @@ fun PreguntaScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text("Soru ${estado.numeroPregunta} / 5", style = MaterialTheme.typography.labelLarge)
+            
+            // Animación suave del indicador de progreso nativo
+            val progresoAnimado by animateFloatAsState(
+                targetValue = (estado.numeroPregunta - 1) / 5f,
+                animationSpec = tween(400),
+                label = "progresoPregunta"
+            )
             LinearProgressIndicator(
-                progress = { (estado.numeroPregunta - 1) / 5f },
+                progress = { progresoAnimado },
                 modifier = Modifier.fillMaxWidth(),
                 trackColor = MaterialTheme.colorScheme.surfaceVariant
             )
@@ -97,16 +110,34 @@ fun PreguntaScreen(
                 }
             }
 
-            // La explicación se despliega desde arriba y aparece en medio segundo.
+            // Animación con rebote elástico (spring) y desvanecimiento para hacer notoria la tarjeta de respuesta
             AnimatedVisibility(
                 visible = estado.respuesta != null,
-                enter = fadeIn(animationSpec = tween(500)) +
-                    expandVertically(animationSpec = tween(500), expandFrom = Alignment.Top),
-                exit = ExitTransition.None
+                enter = fadeIn(animationSpec = tween(350)) +
+                    scaleIn(
+                        initialScale = 0.88f,
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessLow
+                        )
+                    ) +
+                    slideInVertically(
+                        initialOffsetY = { 60 },
+                        animationSpec = tween(350)
+                    ),
+                exit = fadeOut(animationSpec = tween(200))
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 estado.respuesta?.let { respuesta ->
-                Card(modifier = Modifier.fillMaxWidth()) {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (respuesta.esCorrecta)
+                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f)
+                        else
+                            MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.45f)
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)

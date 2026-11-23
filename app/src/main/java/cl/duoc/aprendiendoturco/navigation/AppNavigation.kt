@@ -21,6 +21,7 @@ import cl.duoc.aprendiendoturco.viewmodel.QuizViewModel
 import cl.duoc.aprendiendoturco.viewmodel.DogRewardViewModel
 import cl.duoc.aprendiendoturco.ui.screens.FinalScreen
 import cl.duoc.aprendiendoturco.ui.utils.SonidosQuiz
+import cl.duoc.aprendiendoturco.ui.utils.VibradorNativo
 
 // Rutas de las pantallas, siguiendo la estructura de la guía 10.
 sealed class Screen(val route: String) {
@@ -36,6 +37,7 @@ fun AppNavigation() {
     // Compartimos los sonidos entre las pantallas para que no se corten al navegar.
     val contexto = LocalContext.current
     val sonidos = remember(contexto) { SonidosQuiz(contexto) }
+    val vibrador = remember(contexto) { VibradorNativo(contexto) }
     DisposableEffect(sonidos) {
         onDispose { sonidos.liberar() }
     }
@@ -90,7 +92,11 @@ fun AppNavigation() {
                 pregunta = quizViewModel.preguntaActual,
                 onResponder = { indice ->
                     if (quizEstado.respuesta == null) {
-                        sonidos.reproducirRespuesta(quizViewModel.preguntaActual.alternativas[indice])
+                        val eleccion = quizViewModel.preguntaActual.alternativas[indice]
+                        sonidos.reproducirRespuesta(eleccion)
+                        if (eleccion.esCorrecta) {
+                            vibrador.vibrarExito()
+                        }
                         quizViewModel.responder(indice)
                     }
                 },
